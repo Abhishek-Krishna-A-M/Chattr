@@ -22,9 +22,9 @@ const allMessages = asyncHandler(async (req, res) => {
 // @route   POST /api/messages
 // @access  Private
 const sendMessage = asyncHandler(async (req, res) => {
-    const { content, chatId } = req.body;
+    const { content, chatId, media, mediaType } = req.body;
 
-    if (!content || !chatId) {
+    if (!content && !media || !chatId) {
         console.log('Invalid data passed into request');
         return res.sendStatus(400);
     }
@@ -33,6 +33,8 @@ const sendMessage = asyncHandler(async (req, res) => {
         sender: req.user._id,
         content: content,
         chat: chatId,
+        media: media,
+        mediaType: mediaType
     };
 
     try {
@@ -47,6 +49,17 @@ const sendMessage = asyncHandler(async (req, res) => {
 
         // Update the latestMessage field in the Chat model
         await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+
+        const chat = await Chat.findById(chatId).populate('users', '-password');
+        if (chat && chat.users) {
+            chat.users.forEach(user => {
+                if (user._id.toString() === req.user._id.toString()) return; // Don't send to self
+                // Emit to the individual user's room for notification
+                io.to(user._id.toString()).emit('message received', message);
+            });
+            // Optionally, emit to the chat room for direct display if user is in chat
+            // io.to(chatId).emit('message displayed', message); // This might be redundant if individual rooms handle it
+        }
 
         res.json(message);
     } catch (error) {

@@ -13,6 +13,11 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error('Please enter all the fields');
     }
 
+    if (!name || name.length < 3 || name.length > 50) {
+        res.status(400);
+        throw new Error('Name must be between 3 and 50 characters');
+    }
+
     const userExists = await User.findOne({ email });
 
     if (userExists) {

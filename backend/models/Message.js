@@ -6,7 +6,8 @@ const messageSchema = mongoose.Schema(
         content: { type: String, trim: true },
         chat: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },
         readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // For read receipts
-        media: { type: String, default: null } // URL to uploaded media
+        media: { type: String, default: null },// URL to uploaded media
+        mediaType: { type: String, default: null }
     },
     {
         timestamps: true,
