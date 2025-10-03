@@ -4,9 +4,10 @@ const connectDB = require('./config/db');
 const http = require('http');
 const { Server } = require('socket.io');
 const authRoutes = require('./routes/authRoutes')
-const { notFound, errorHandler } = require('./middileware/errorHandler')
+const { notFound, errorHandler } = require('./middleware/errorHandler')
 const userRoutes = require('./routes/userRoutes')
 const chatRoutes = require('./routes/chatRoutes')
+const messageRoutes = require('./routes/messageRoutes')
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/chats', chatRoutes);
-// app.use('/api/messages', messageRoutes);
+app.use('/api/messages', messageRoutes);
 
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
