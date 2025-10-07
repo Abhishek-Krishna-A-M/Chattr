@@ -1,8 +1,8 @@
-##💬 Chattr
+## 💬 Chattr
 
 A sleek, real-time chat application built for modern communication — featuring secure authentication, lightning-fast messaging, image uploads, responsive design, and both light and dark themes. Stay connected with sound notifications and a smooth, user-friendly interface.
 
-###🚀 Features
+### 🚀 Features
 
 - 🔐 Authentication – Secure login and signup system (JWT / OAuth / Firebase Auth compatible).
 
